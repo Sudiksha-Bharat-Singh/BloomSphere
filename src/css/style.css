@@ -286,7 +286,7 @@ body {
 
 .hero-container {
   display: grid;
-  grid-template-columns: 1fr 1.2fr;
+  grid-template-columns: 0.9fr 1.1fr;
   gap: 40px;
   align-items: center;
   width: 100%;
@@ -2436,7 +2436,7 @@ body {
   align-items: center;
   justify-content: flex-end; /* Align the visualizer to the right side */
   width: 100%;
-  height: 600px; /* Increased from 520px to support a larger flower */
+  height: 600px;
   overflow: visible;
 }
 
@@ -2480,9 +2480,9 @@ body {
   position: absolute;
   z-index: 5;
   padding: 10px 16px;
-  background: rgba(17, 10, 28, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  background: rgba(11, 5, 26, 0.7);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 15px rgba(139, 92, 246, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -2497,9 +2497,9 @@ body {
 
 .floating-tag:hover {
   transform: scale(1.05) translateY(-2px);
-  border-color: rgba(192, 132, 252, 0.4);
-  box-shadow: 0 12px 40px rgba(168, 85, 247, 0.3);
-  background: rgba(17, 10, 28, 0.8);
+  border-color: rgba(192, 132, 252, 0.6);
+  box-shadow: 0 12px 40px rgba(168, 85, 247, 0.4), 0 0 25px rgba(139, 92, 246, 0.4);
+  background: rgba(11, 5, 26, 0.85);
 }
 
 .tag-title {
@@ -2553,8 +2553,8 @@ body {
 /* Holographic Base Platforms / Rings Beneath Flower */
 .hologram-rings {
   position: absolute;
-  bottom: 0px;
-  width: 380px;
+  bottom: 40px;
+  width: 260px;
   height: 60px;
   perspective: 1000px;
   display: flex;
@@ -2574,15 +2574,15 @@ body {
 }
 
 .ring-1 {
-  width: 360px;
-  height: 360px;
+  width: 240px;
+  height: 240px;
   border-color: rgba(168, 85, 247, 0.35);
   animation-duration: 8s;
 }
 
 .ring-2 {
-  width: 260px;
-  height: 260px;
+  width: 180px;
+  height: 180px;
   border-color: rgba(139, 92, 246, 0.25);
   border-style: dashed;
   animation-duration: 12s;
@@ -2590,8 +2590,8 @@ body {
 }
 
 .ring-3 {
-  width: 160px;
-  height: 160px;
+  width: 100px;
+  height: 100px;
   border-color: rgba(192, 132, 252, 0.5);
   box-shadow: 0 0 25px rgba(192, 132, 252, 0.4);
   animation-duration: 6s;
@@ -2656,7 +2656,7 @@ body {
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 580px; /* Constrained to match scaled flower and align right */
+  max-width: 380px; /* Constrained to match scaled flower and align right */
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -2665,14 +2665,16 @@ body {
   margin-left: auto; /* Aligns container to the right edge of the visual column */
 }
 
-.hero-iris-svg {
-  width: 100%;
-  max-width: 580px; /* Increased to occupy 80% of right-side visual column */
+.hero-iris-img {
+  width: 90%;
+  max-width: 380px; /* Scaled 15-20% smaller than previous implementations */
   height: auto;
+  mix-blend-mode: screen; /* Eliminates black pixels for organic integration */
   filter: drop-shadow(0 15px 35px rgba(139, 92, 246, 0.45));
   animation: float-flower-hologram 6s infinite ease-in-out;
   z-index: 2;
-  overflow: visible;
+  position: relative;
+  margin-bottom: 20px;
 }
 
 @keyframes float-flower-hologram {
@@ -2683,8 +2685,10 @@ body {
 
 .hero-visual-glow {
   position: absolute;
-  width: 580px; /* Scaled matching the flower size */
-  height: 580px;
+  top: 50%;
+  left: 50%;
+  width: 380px; /* Scaled matching the flower size */
+  height: 380px;
   background: radial-gradient(circle, rgba(168, 85, 247, 0.35) 0%, rgba(139, 92, 246, 0) 70%);
   border-radius: 50%;
   filter: blur(55px);
@@ -2694,8 +2698,8 @@ body {
 }
 
 @keyframes pulse-glow-holo {
-  0% { transform: scale(0.9) translateY(10px); opacity: 0.7; }
-  100% { transform: scale(1.2) translateY(-10px); opacity: 1; }
+  0% { transform: translate(-50%, -50%) scale(0.9) translateY(10px); opacity: 0.7; }
+  100% { transform: translate(-50%, -50%) scale(1.2) translateY(-10px); opacity: 1; }
 }
 
 /* Responsive Media Queries to prevent overlapping of flower and cards */
@@ -2712,19 +2716,20 @@ body {
   .hero-visual {
     height: 480px;
   }
-  .hero-iris-svg {
-    max-width: 360px; /* Slightly scaled down on tablet to maintain spacing */
+  .hero-iris-img {
+    max-width: 320px; /* Slightly scaled down on tablet to maintain spacing */
   }
   .hero-visual-glow {
-    width: 360px;
-    height: 360px;
+    width: 320px;
+    height: 320px;
   }
   .hologram-rings {
-    width: 240px;
+    width: 220px;
+    bottom: 30px;
   }
-  .ring-1 { width: 220px; height: 220px; }
-  .ring-2 { width: 160px; height: 160px; }
-  .ring-3 { width: 100px; height: 100px; }
+  .ring-1 { width: 200px; height: 200px; }
+  .ring-2 { width: 150px; height: 150px; }
+  .ring-3 { width: 80px; height: 80px; }
 }
 
 @media (max-width: 768px) {
@@ -2745,21 +2750,22 @@ body {
     justify-content: center;
   }
 
-  .hero-iris-svg {
-    max-width: 280px; /* Scale down on mobile to fit nicely */
+  .hero-iris-img {
+    max-width: 240px; /* Scale down on mobile to fit nicely */
   }
 
   .hero-visual-glow {
-    width: 280px;
-    height: 280px;
+    width: 240px;
+    height: 240px;
   }
 
   .hologram-rings {
-    width: 200px;
+    width: 180px;
+    bottom: 20px;
   }
-  .ring-1 { width: 180px; height: 180px; }
-  .ring-2 { width: 130px; height: 130px; }
-  .ring-3 { width: 80px; height: 80px; }
+  .ring-1 { width: 160px; height: 160px; }
+  .ring-2 { width: 120px; height: 120px; }
+  .ring-3 { width: 70px; height: 70px; }
   
   .connector-lines-svg {
     display: none; /* Hide connector lines on mobile to avoid clutter */
