@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BloomSphere - Intelligent Flower Classification</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="BloomSphere is a premium machine learning system classifying Iris flowers using the K-Nearest Neighbors (KNN) algorithm. Inspect the dataset, metrics, and make predictions.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌸</text></svg>">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="/src/css/style.css">
+</head>
+<body>
+  <!-- Ambient Background Glows -->
+  <div class="glow-bg glow-bg-1"></div>
+  <div class="glow-bg glow-bg-2"></div>
+  <div class="glow-bg glow-bg-3"></div>
+
+  <!-- Header / Navigation -->
+  <header class="app-header">
+    <div class="header-container container">
+      <a href="#" class="logo-group">
+        <div class="logo-icon">
+          <i data-lucide="flower-2"></i>
+        </div>
+        <span class="logo-text">Bloom<span>Sphere</span></span>
+      </a>
+      <nav class="nav-links">
+        <a href="#about" class="nav-link">About Project</a>
+        <a href="#species" class="nav-link">Iris Species</a>
+        <a href="#workflow" class="nav-link">ML Workflow</a>
+      </nav>
+      <button class="btn btn-primary btn-header" id="btn-header-start">
+        <span>Start Prediction</span>
+        <i data-lucide="arrow-right"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Hero Section -->
+    <section class="section-hero">
+      <div class="hero-container container">
+        <!-- Left Side: Content -->
+        <div class="hero-content">
+          <div class="badge-container animate-fade-in">
+            <span class="badge">
+              <i data-lucide="sparkles"></i>
+              AI Supervised Learning Model
+            </span>
+          </div>
+          
+          <h1 class="hero-title animate-fade-in-up">
+            Bloom<span>Sphere</span>
+          </h1>
+          
+          <p class="hero-subtitle animate-fade-in-up delay-1">
+            Intelligent Flower Classification Through Machine Learning
+          </p>
+
+          <p class="hero-description animate-fade-in-up delay-2">
+            An interactive internship project demonstrating the power of the <strong>K-Nearest Neighbors (KNN)</strong> algorithm. Predict flower species instantly using botanical dimensions with zero-server, high-performance in-browser mathematics.
+          </p>
+          
+          <div class="hero-actions animate-fade-in-up delay-3">
+            <button class="btn btn-primary btn-lg" id="btn-hero-start">
+              <span>Start Prediction</span>
+              <i data-lucide="play"></i>
+            </button>
+            <a href="#about" class="btn btn-secondary btn-lg">
+              <span>Learn More</span>
+              <i data-lucide="info"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Side: Graphic & Floating Card -->
+        <div class="hero-visual animate-fade-in delay-2">
+          <!-- Circular glowing gradient background -->
+          <div class="hero-visual-glow"></div>
+          
+          <!-- Large Iris Flower Illustration (Detailed SVG) -->
+          <div class="iris-illustration-container">
+            <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" class="hero-iris-svg">
+              <!-- Background radial glow -->
+              <circle cx="200" cy="200" r="160" fill="url(#hero-iris-glow-grad)" opacity="0.2" />
+              
+              <!-- Flower Petals / Leaves (Stylized Detailed Iris) -->
+              <g class="flower-structure">
+                <!-- Bottom sepals (large, spreading, drooping with glowing gradient) -->
+                <path d="M200 220 C100 240, 60 340, 200 380 C340 340, 300 240, 200 220 Z" fill="url(#hero-petal-grad-bottom)" opacity="0.4" stroke="url(#hero-petal-stroke-bottom)" stroke-width="2"/>
+                <path d="M200 220 C110 210, 80 140, 100 260 C120 380, 200 350, 200 220 Z" fill="url(#hero-petal-grad-mid)" opacity="0.3" stroke="url(#hero-petal-stroke-mid)" stroke-width="1.5"/>
+                <path d="M200 220 C290 210, 320 140, 300 260 C280 380, 200 350, 200 220 Z" fill="url(#hero-petal-grad-mid)" opacity="0.3" stroke="url(#hero-petal-stroke-mid)" stroke-width="1.5"/>
+                
+                <!-- Upper petals (standard petals, upright, overlapping) -->
+                <path d="M200 220 C120 120, 150 40, 200 80 C250 40, 280 120, 200 220 Z" fill="url(#hero-petal-grad-top)" fill-opacity="0.6" stroke="url(#hero-petal-stroke-top)" stroke-width="2.5"/>
+                <path d="M200 220 C140 160, 110 80, 160 100 C210 120, 200 220, 200 220 Z" fill="url(#hero-petal-grad-top-side)" fill-opacity="0.5" stroke="url(#hero-petal-stroke-top)" stroke-width="2"/>
+                <path d="M200 220 C260 160, 290 80, 240 100 C190 120, 200 220, 200 220 Z" fill="url(#hero-petal-grad-top-side)" fill-opacity="0.5" stroke="url(#hero-petal-stroke-top)" stroke-width="2"/>
+                
+                <!-- Center core glow -->
+                <circle cx="200" cy="210" r="28" fill="#C084FC" filter="blur(4px)" opacity="0.6"/>
+                <circle cx="200" cy="210" r="16" fill="#FFFFFF" filter="blur(1px)"/>
+              </g>
+
+              <!-- SVG Definitions -->
+              <defs>
+                <linearGradient id="hero-petal-grad-top" x1="200" y1="50" x2="200" y2="220">
+                  <stop offset="0%" stop-color="#C084FC"/>
+                  <stop offset="50%" stop-color="#A855F7"/>
+                  <stop offset="100%" stop-color="#8B5CF6"/>
+                </linearGradient>
+                <linearGradient id="hero-petal-grad-top-side" x1="120" y1="80" x2="200" y2="220">
+                  <stop offset="0%" stop-color="#E9D5FF"/>
+                  <stop offset="100%" stop-color="#8B5CF6"/>
+                </linearGradient>
+                <linearGradient id="hero-petal-grad-mid" x1="100" y1="180" x2="200" y2="350">
+                  <stop offset="0%" stop-color="#A855F7"/>
+                  <stop offset="100%" stop-color="#4C1D95"/>
+                </linearGradient>
+                <linearGradient id="hero-petal-grad-bottom" x1="200" y1="220" x2="200" y2="380">
+                  <stop offset="0%" stop-color="#8B5CF6"/>
+                  <stop offset="100%" stop-color="#1E1B4B"/>
+                </linearGradient>
+                <linearGradient id="hero-petal-stroke-top" x1="200" y1="50" x2="200" y2="220">
+                  <stop offset="0%" stop-color="#E9D5FF"/>
+                  <stop offset="100%" stop-color="#A855F7"/>
+                </linearGradient>
+                <linearGradient id="hero-petal-stroke-mid" x1="100" y1="180" x2="200" y2="350">
+                  <stop offset="0%" stop-color="#C084FC"/>
+                  <stop offset="100%" stop-color="#8B5CF6"/>
+                </linearGradient>
+                <linearGradient id="hero-petal-stroke-bottom" x1="200" y1="220" x2="200" y2="380">
+                  <stop offset="0%" stop-color="#A855F7"/>
+                  <stop offset="100%" stop-color="#4C1D95"/>
+                </linearGradient>
+                <radialGradient id="hero-iris-glow-grad" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#A855F7"/>
+                  <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+            </svg>
+          </div>
+
+          <!-- Floating Glass Card -->
+          <div class="floating-glass-card">
+            <div class="floating-card-icon">
+              <i data-lucide="cpu" class="pulse-icon"></i>
+            </div>
+            <div class="floating-card-info">
+              <span class="floating-badge">AI Powered</span>
+              <span class="floating-text">K-Nearest Neighbors Classification Engine</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Interactive Grid Background for Hero -->
+      <div class="hero-grid-overlay"></div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="section-stats section-padding">
+      <div class="container">
+        <div class="stats-grid">
+          <!-- Stat Card 1 -->
+          <div class="glass-card stat-card scroll-reveal">
+            <div class="stat-icon-wrapper">
+              <i data-lucide="database"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-title">Samples</span>
+              <span class="stat-number">150</span>
+              <span class="stat-description">Total records in the Iris Dataset</span>
+            </div>
+          </div>
+
+          <!-- Stat Card 2 -->
+          <div class="glass-card stat-card scroll-reveal">
+            <div class="stat-icon-wrapper">
+              <i data-lucide="dna"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-title">Species</span>
+              <span class="stat-number">3</span>
+              <span class="stat-description">Setosa, Versicolor, Virginica</span>
+            </div>
+          </div>
+
+          <!-- Stat Card 3 -->
+          <div class="glass-card stat-card scroll-reveal">
+            <div class="stat-icon-wrapper">
+              <i data-lucide="sliders"></i>
+            </div>
+            <div class="stat-info">
+              <span class="stat-title">Features</span>
+              <span class="stat-number">4</span>
+              <span class="stat-description">Sepal Length, Sepal Width, Petal Length, Petal Width</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section-about section-padding scroll-reveal">
+      <div class="container about-container-flex">
+        <!-- Left side text content -->
+        <div class="about-text-content">
+          <span class="section-label">Theoretical Foundation</span>
+          <h2 class="section-title">About BloomSphere</h2>
+          <div class="section-divider-left"></div>
+          <p class="about-lead">
+            BloomSphere is an AI-powered flower classification system built using the Iris Dataset and the K-Nearest Neighbors (KNN) algorithm. It demonstrates supervised machine learning concepts including data preprocessing, training, prediction, and model evaluation.
+          </p>
+        </div>
+
+        <!-- Right side vertical workflow visual -->
+        <div class="about-workflow-wrapper">
+          <h3 class="workflow-heading">Machine Learning Workflow</h3>
+          
+          <div class="workflow-vertical-steps">
+            <!-- Step 1 -->
+            <div class="workflow-v-step">
+              <div class="workflow-v-badge-wrapper">
+                <div class="workflow-v-badge">01</div>
+              </div>
+              <div class="workflow-v-card glass-card">
+                <div class="workflow-v-card-icon">
+                  <i data-lucide="database"></i>
+                </div>
+                <div class="workflow-v-card-info">
+                  <h4>Dataset</h4>
+                  <p>Load the 150 Iris samples containing 4 numeric physical features.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Connector -->
+            <div class="workflow-v-connector">
+              <div class="workflow-v-connector-line"></div>
+              <i data-lucide="chevron-down" class="workflow-v-connector-arrow"></i>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="workflow-v-step">
+              <div class="workflow-v-badge-wrapper">
+                <div class="workflow-v-badge">02</div>
+              </div>
+              <div class="workflow-v-card glass-card">
+                <div class="workflow-v-card-icon">
+                  <i data-lucide="ruler"></i>
+                </div>
+                <div class="workflow-v-card-info">
+                  <h4>Scaling</h4>
+                  <p>Standardize length & width values to align dimensional scales.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Connector -->
+            <div class="workflow-v-connector">
+              <div class="workflow-v-connector-line"></div>
+              <i data-lucide="chevron-down" class="workflow-v-connector-arrow"></i>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="workflow-v-step">
+              <div class="workflow-v-badge-wrapper">
+                <div class="workflow-v-badge">03</div>
+              </div>
+              <div class="workflow-v-card glass-card">
+                <div class="workflow-v-card-icon">
+                  <i data-lucide="split"></i>
+                </div>
+                <div class="workflow-v-card-info">
+                  <h4>Train-Test Split</h4>
+                  <p>Partition data into reference training targets and test validation subsets.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Connector -->
+            <div class="workflow-v-connector">
+              <div class="workflow-v-connector-line"></div>
+              <i data-lucide="chevron-down" class="workflow-v-connector-arrow"></i>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="workflow-v-step">
+              <div class="workflow-v-badge-wrapper">
+                <div class="workflow-v-badge">04</div>
+              </div>
+              <div class="workflow-v-card glass-card">
+                <div class="workflow-v-card-icon">
+                  <i data-lucide="binary"></i>
+                </div>
+                <div class="workflow-v-card-info">
+                  <h4>KNN Classification</h4>
+                  <p>Search vector space for the closest instances using Euclidean distance calculations.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Connector -->
+            <div class="workflow-v-connector">
+              <div class="workflow-v-connector-line"></div>
+              <i data-lucide="chevron-down" class="workflow-v-connector-arrow"></i>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="workflow-v-step">
+              <div class="workflow-v-badge-wrapper">
+                <div class="workflow-v-badge">05</div>
+              </div>
+              <div class="workflow-v-card glass-card">
+                <div class="workflow-v-card-icon">
+                  <i data-lucide="sparkles"></i>
+                </div>
+                <div class="workflow-v-card-info">
+                  <h4>Prediction</h4>
+                  <p>Cast vote among nearest neighbors to determine predicted flower class.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Species Showcase -->
+    <section id="species" class="section-species section-padding scroll-reveal">
+      <div class="container">
+        <div class="section-header text-center">
+          <span class="section-label">Target Classifications</span>
+          <h2 class="section-title">Meet The Iris Species</h2>
+          <p class="section-subtitle">The Iris Dataset contains three distinct flower species used for machine learning classification.</p>
+          <div class="section-divider"></div>
+        </div>
+
+        <div class="species-grid">
+          <!-- Iris Setosa -->
+          <div class="glass-card species-card">
+            <div class="species-image-wrapper">
+              <!-- Stylized Inline SVG Flower -->
+              <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="species-svg">
+                <circle cx="100" cy="100" r="80" fill="url(#setosa-grad-bg)" opacity="0.15"/>
+                <g class="svg-petals" stroke="url(#setosa-grad)" stroke-width="3">
+                  <!-- Setosa flower structure (smaller, compact, rounder) -->
+                  <path d="M100 100 C70 40, 130 40, 100 100 Z" fill="url(#setosa-grad)" fill-opacity="0.3"/>
+                  <path d="M100 100 C160 70, 160 130, 100 100 Z" fill="url(#setosa-grad)" fill-opacity="0.3"/>
+                  <path d="M100 100 C130 160, 70 160, 100 100 Z" fill="url(#setosa-grad)" fill-opacity="0.3"/>
+                  <path d="M100 100 C40 130, 40 70, 100 100 Z" fill="url(#setosa-grad)" fill-opacity="0.3"/>
+                  <!-- Secondary petals -->
+                  <path d="M100 100 C60 60, 140 60, 100 100 Z" fill="url(#setosa-grad-alt)" fill-opacity="0.4"/>
+                  <path d="M100 100 C140 140, 60 140, 100 100 Z" fill="url(#setosa-grad-alt)" fill-opacity="0.4"/>
+                </g>
+                <circle cx="100" cy="100" r="14" fill="#C084FC" filter="blur(2px)"/>
+                <circle cx="100" cy="100" r="8" fill="#FFFFFF"/>
+                <defs>
+                  <linearGradient id="setosa-grad" x1="40" y1="40" x2="160" y2="160">
+                    <stop offset="0%" stop-color="#8B5CF6"/>
+                    <stop offset="100%" stop-color="#C084FC"/>
+                  </linearGradient>
+                  <linearGradient id="setosa-grad-alt" x1="40" y1="160" x2="160" y2="40">
+                    <stop offset="0%" stop-color="#A855F7"/>
+                    <stop offset="100%" stop-color="#E9D5FF"/>
+                  </linearGradient>
+                  <radialGradient id="setosa-grad-bg" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#8B5CF6"/>
+                    <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+                  </radialGradient>
+                </defs>
+              </svg>
+              <div class="species-badge">Class 1</div>
+            </div>
+            <div class="species-info">
+              <h3>Iris Setosa</h3>
+              <span class="scientific-name">Iris setosa</span>
+              <p>
+                Known for its small petals and easy separability from other species.
+              </p>
+              <div class="species-features">
+                <span class="feat-tag">Short Petals</span>
+                <span class="feat-tag">Wide Sepals</span>
+                <span class="feat-tag">Linearly Separable</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Iris Versicolor -->
+          <div class="glass-card species-card">
+            <div class="species-image-wrapper">
+              <!-- Stylized Inline SVG Flower -->
+              <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="species-svg">
+                <circle cx="100" cy="100" r="80" fill="url(#versicolor-grad-bg)" opacity="0.15"/>
+                <g class="svg-petals" stroke="url(#versicolor-grad)" stroke-width="2.5">
+                  <!-- Versicolor flower structure (mid size, drooping shape) -->
+                  <path d="M100 100 C80 30, 120 30, 100 100 Z" fill="url(#versicolor-grad)" fill-opacity="0.3"/>
+                  <path d="M100 100 C170 80, 170 120, 100 100 Z" fill="url(#versicolor-grad)" fill-opacity="0.3"/>
+                  <path d="M100 100 C120 170, 80 170, 100 100 Z" fill="url(#versicolor-grad)" fill-opacity="0.3"/>
+                  <path d="M100 100 C30 120, 30 80, 100 100 Z" fill="url(#versicolor-grad)" fill-opacity="0.3"/>
+                  <!-- Diagonals -->
+                  <path d="M100 100 C50 50, 150 50, 100 100 Z" fill="url(#versicolor-grad-alt)" fill-opacity="0.3"/>
+                  <path d="M100 100 C150 150, 50 150, 100 100 Z" fill="url(#versicolor-grad-alt)" fill-opacity="0.3"/>
+                  <path d="M100 100 C150 50, 50 150, 100 100 Z" fill="url(#versicolor-grad-alt)" fill-opacity="0.3"/>
+                  <path d="M100 100 C50 150, 150 50, 100 100 Z" fill="url(#versicolor-grad-alt)" fill-opacity="0.3"/>
+                </g>
+                <circle cx="100" cy="100" r="16" fill="#A855F7" filter="blur(2px)"/>
+                <circle cx="100" cy="100" r="8" fill="#F3E8FF"/>
+                <defs>
+                  <linearGradient id="versicolor-grad" x1="40" y1="40" x2="160" y2="160">
+                    <stop offset="0%" stop-color="#A855F7"/>
+                    <stop offset="100%" stop-color="#C084FC"/>
+                  </linearGradient>
+                  <linearGradient id="versicolor-grad-alt" x1="160" y1="40" x2="40" y2="160">
+                    <stop offset="0%" stop-color="#8B5CF6"/>
+                    <stop offset="100%" stop-color="#D8B4FE"/>
+                  </linearGradient>
+                  <radialGradient id="versicolor-grad-bg" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#A855F7"/>
+                    <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+                  </radialGradient>
+                </defs>
+              </svg>
+              <div class="species-badge">Class 2</div>
+            </div>
+            <div class="species-info">
+              <h3>Iris Versicolor</h3>
+              <span class="scientific-name">Iris versicolor</span>
+              <p>
+                A medium-sized species with balanced petal and sepal dimensions.
+              </p>
+              <div class="species-features">
+                <span class="feat-tag">Medium Petals</span>
+                <span class="feat-tag">Moderate Sepals</span>
+                <span class="feat-tag">Feature Overlap</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Iris Virginica -->
+          <div class="glass-card species-card">
+            <div class="species-image-wrapper">
+              <!-- Stylized Inline SVG Flower -->
+              <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="species-svg">
+                <circle cx="100" cy="100" r="80" fill="url(#virginica-grad-bg)" opacity="0.15"/>
+                <g class="svg-petals" stroke="url(#virginica-grad)" stroke-width="2.5">
+                  <!-- Virginica flower structure (large, spreading, elaborate) -->
+                  <path d="M100 100 C70 10, 130 10, 100 100 Z" fill="url(#virginica-grad)" fill-opacity="0.3"/>
+                  <path d="M100 100 C190 70, 190 130, 100 100 Z" fill="url(#virginica-grad)" fill-opacity="0.3"/>
+                  <path d="M100 100 C130 190, 70 190, 100 100 Z" fill="url(#virginica-grad)" fill-opacity="0.3"/>
+                  <path d="M100 100 C10 130, 10 70, 100 100 Z" fill="url(#virginica-grad)" fill-opacity="0.3"/>
+                  <!-- Diagonals -->
+                  <path d="M100 100 C40 40, 160 40, 100 100 Z" fill="url(#virginica-grad-alt)" fill-opacity="0.2"/>
+                  <path d="M100 100 C160 160, 40 160, 100 100 Z" fill="url(#virginica-grad-alt)" fill-opacity="0.2"/>
+                  <path d="M100 100 C160 40, 40 160, 100 100 Z" fill="url(#virginica-grad-alt)" fill-opacity="0.2"/>
+                  <path d="M100 100 C40 160, 160 40, 100 100 Z" fill="url(#virginica-grad-alt)" fill-opacity="0.2"/>
+                </g>
+                <circle cx="100" cy="100" r="18" fill="#C084FC" filter="blur(2px)"/>
+                <circle cx="100" cy="100" r="8" fill="#F5F3FF"/>
+                <defs>
+                  <linearGradient id="virginica-grad" x1="40" y1="40" x2="160" y2="160">
+                    <stop offset="0%" stop-color="#C084FC"/>
+                    <stop offset="100%" stop-color="#8B5CF6"/>
+                  </linearGradient>
+                  <linearGradient id="virginica-grad-alt" x1="40" y1="160" x2="160" y2="40">
+                    <stop offset="0%" stop-color="#E9D5FF"/>
+                    <stop offset="100%" stop-color="#A855F7"/>
+                  </linearGradient>
+                  <radialGradient id="virginica-grad-bg" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#C084FC"/>
+                    <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+                  </radialGradient>
+                </defs>
+              </svg>
+              <div class="species-badge">Class 3</div>
+            </div>
+            <div class="species-info">
+              <h3>Iris Virginica</h3>
+              <span class="scientific-name">Iris virginica</span>
+              <p>
+                The largest Iris species with longer petals and broader measurements.
+              </p>
+              <div class="species-features">
+                <span class="feat-tag">Long Petals</span>
+                <span class="feat-tag">Narrow Sepals</span>
+                <span class="feat-tag">Complex Boundary</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Informational glass banner card -->
+        <div class="species-banner-card glass-card scroll-reveal">
+          <div class="species-banner-content">
+            <div class="species-banner-icon">
+              <i data-lucide="info"></i>
+            </div>
+            <span class="species-banner-text">Each species contains 50 samples in the Iris Dataset.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Machine Learning Workflow -->
+    <section id="workflow" class="section-workflow section-padding scroll-reveal">
+      <div class="container">
+        <div class="section-header text-center">
+          <span class="section-label">Pipeline Lifecycle</span>
+          <h2 class="section-title">Machine Learning Workflow</h2>
+          <div class="section-divider"></div>
+        </div>
+
+        <div class="workflow-container">
+          <div class="workflow-timeline">
+            <!-- Step 1 -->
+            <div class="workflow-step glass-card">
+              <div class="step-num">01</div>
+              <div class="step-icon">
+                <i data-lucide="table"></i>
+              </div>
+              <h4>Dataset</h4>
+              <p>Load the 150 Iris instances containing 4 numeric dimensions and target classes.</p>
+            </div>
+            
+            <!-- Connector 1 -->
+            <div class="workflow-connector">
+              <div class="connector-line"></div>
+              <i data-lucide="chevron-right" class="connector-arrow"></i>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="workflow-step glass-card">
+              <div class="step-num">02</div>
+              <div class="step-icon">
+                <i data-lucide="move-horizontal"></i>
+              </div>
+              <h4>Scaling</h4>
+              <p>Normalize inputs to ensure features with larger values do not bias distance calculations.</p>
+            </div>
+
+            <!-- Connector 2 -->
+            <div class="workflow-connector">
+              <div class="connector-line"></div>
+              <i data-lucide="chevron-right" class="connector-arrow"></i>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="workflow-step glass-card">
+              <div class="step-num">03</div>
+              <div class="step-icon">
+                <i data-lucide="git-branch"></i>
+              </div>
+              <h4>Training</h4>
+              <p>Partition data into Train/Test splits. Store training vectors as local references.</p>
+            </div>
+
+            <!-- Connector 3 -->
+            <div class="workflow-connector">
+              <div class="connector-line"></div>
+              <i data-lucide="chevron-right" class="connector-arrow"></i>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="workflow-step glass-card">
+              <div class="step-num">04</div>
+              <div class="step-icon">
+                <i data-lucide="compass"></i>
+              </div>
+              <h4>KNN</h4>
+              <p>Identify the $k$ nearest neighbors to the test vector using Euclidean distance.</p>
+            </div>
+
+            <!-- Connector 4 -->
+            <div class="workflow-connector">
+              <div class="connector-line"></div>
+              <i data-lucide="chevron-right" class="connector-arrow"></i>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="workflow-step glass-card">
+              <div class="step-num">05</div>
+              <div class="step-icon">
+                <i data-lucide="activity"></i>
+              </div>
+              <h4>Prediction</h4>
+              <p>Predict species based on majority voter category. Update metrics output.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Prediction Section (Hidden by default) -->
+    <section id="prediction" class="section-prediction section-padding hidden">
+      <div class="container">
+        <!-- Section Header -->
+        <div class="section-header text-center">
+          <span class="section-label">AI Classification Playground</span>
+          <h2 class="section-title">Predict Iris Species</h2>
+          <div class="section-divider"></div>
+        </div>
+
+        <div class="prediction-workspace">
+          <!-- Left side: Parameter Sliders Form -->
+          <div class="prediction-form-column glass-card scroll-reveal">
+            <h3 class="panel-heading">
+              <i data-lucide="sliders" class="panel-header-icon"></i>
+              <span>Botanical Inputs</span>
+            </h3>
+            <form id="prediction-form" class="prediction-form">
+              <!-- Sepal Length Slider -->
+              <div class="slider-group">
+                <div class="slider-header">
+                  <label for="sepal-length">Sepal Length</label>
+                  <span class="slider-value-display"><span id="val-sepal-length">5.8</span> cm</span>
+                </div>
+                <input type="range" id="sepal-length" name="sepalLength" min="4.3" max="7.9" step="0.1" value="5.8" class="range-slider">
+                <div class="slider-limits"><span>4.3 cm</span> <span>7.9 cm</span></div>
+              </div>
+
+              <!-- Sepal Width Slider -->
+              <div class="slider-group">
+                <div class="slider-header">
+                  <label for="sepal-width">Sepal Width</label>
+                  <span class="slider-value-display"><span id="val-sepal-width">3.0</span> cm</span>
+                </div>
+                <input type="range" id="sepal-width" name="sepalWidth" min="2.0" max="4.4" step="0.1" value="3.0" class="range-slider">
+                <div class="slider-limits"><span>2.0 cm</span> <span>4.4 cm</span></div>
+              </div>
+
+              <!-- Petal Length Slider -->
+              <div class="slider-group">
+                <div class="slider-header">
+                  <label for="petal-length">Petal Length</label>
+                  <span class="slider-value-display"><span id="val-petal-length">4.3</span> cm</span>
+                </div>
+                <input type="range" id="petal-length" name="petalLength" min="1.0" max="6.9" step="0.1" value="4.3" class="range-slider">
+                <div class="slider-limits"><span>1.0 cm</span> <span>6.9 cm</span></div>
+              </div>
+
+              <!-- Petal Width Slider -->
+              <div class="slider-group">
+                <div class="slider-header">
+                  <label for="petal-width">Petal Width</label>
+                  <span class="slider-value-display"><span id="val-petal-width">1.3</span> cm</span>
+                </div>
+                <input type="range" id="petal-width" name="petalWidth" min="0.1" max="2.5" step="0.1" value="1.3" class="range-slider">
+                <div class="slider-limits"><span>0.1 cm</span> <span>2.5 cm</span></div>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-predict-submit" id="btn-predict">
+                <i data-lucide="sparkles"></i>
+                <span>Predict Species</span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Right side: Results & Live Metrics -->
+          <div class="prediction-results-column">
+            <!-- Prediction Result Card (Initial empty state, reveals on submission) -->
+            <div id="prediction-result-card" class="glass-card result-card empty-state scroll-reveal">
+              <div class="result-placeholder-content" id="res-placeholder">
+                <i data-lucide="help-circle" class="placeholder-icon"></i>
+                <h4>Ready for Prediction</h4>
+                <p>Adjust the botanical dimension sliders on the left and click "Predict Species" to run local KNN inference.</p>
+              </div>
+
+              <!-- Diagnostic Error Container -->
+              <div id="res-error" class="hidden"></div>
+
+              <div class="result-output-content hidden" id="res-output">
+                <div class="result-card-header" style="margin-bottom: 20px;">
+                  <div class="result-species-icon-wrapper" id="res-icon-wrapper">
+                    <i data-lucide="flower" id="res-icon"></i>
+                  </div>
+                </div>
+
+                <div class="result-field-group" style="margin-bottom: 16px; width: 100%;">
+                  <span class="result-field-label" style="font-size: 11px; text-transform: uppercase; color: var(--text-dim); letter-spacing: 1.5px; display: block; margin-bottom: 4px; font-weight: 600;">Predicted Species</span>
+                  <h3 class="result-title" id="res-species-name" style="margin: 0; font-size: 26px;">Predicted Species</h3>
+                  <span class="scientific-name" id="res-scientific-name" style="margin-top: 2px; display: block;">Scientific Name</span>
+                </div>
+
+                <div class="result-field-group" style="margin-bottom: 16px; width: 100%;">
+                  <span class="result-field-label" style="font-size: 11px; text-transform: uppercase; color: var(--text-dim); letter-spacing: 1.5px; display: block; margin-bottom: 6px; font-weight: 600;">Class</span>
+                  <span class="result-badge" id="res-badge" style="display: inline-block;">Class -</span>
+                </div>
+
+                <div class="result-field-group" style="margin-bottom: 24px; width: 100%;">
+                  <span class="result-field-label" style="font-size: 11px; text-transform: uppercase; color: var(--text-dim); letter-spacing: 1.5px; display: block; margin-bottom: 4px; font-weight: 600;">Description</span>
+                  <p class="result-desc" id="res-description" style="margin: 0; font-size: 14px; line-height: 1.5; color: var(--text-muted);">Description of prediction.</p>
+                </div>
+                
+                <!-- Nearest Neighbors Breakdown -->
+                <div class="neighbors-breakdown">
+                  <h5>KNN Decision Neighbors (K = 5)</h5>
+                  <div class="neighbors-list" id="res-neighbors-list">
+                    <!-- Neighbors dynamic content -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Model Evaluation Metrics Dashboard -->
+            <div class="glass-card metrics-dashboard-card scroll-reveal">
+              <h3 class="panel-heading">
+                <i data-lucide="activity" class="panel-header-icon"></i>
+                <span>Evaluation Dashboard</span>
+              </h3>
+              <p class="metrics-dashboard-subtitle">Calculated on initialization using standardized 80/20 train-test split.</p>
+              
+              <div class="dashboard-metrics-grid">
+                <!-- Accuracy -->
+                <div class="dashboard-metric-item">
+                  <span class="metric-label">Accuracy</span>
+                  <span class="metric-val" id="metric-accuracy">--%</span>
+                </div>
+                <!-- Precision -->
+                <div class="dashboard-metric-item">
+                  <span class="metric-label">Precision</span>
+                  <span class="metric-val" id="metric-precision">--%</span>
+                </div>
+                <!-- Recall -->
+                <div class="dashboard-metric-item">
+                  <span class="metric-label">Recall</span>
+                  <span class="metric-val" id="metric-recall">--%</span>
+                </div>
+                <!-- F1 Score -->
+                <div class="dashboard-metric-item">
+                  <span class="metric-label">F1 Score</span>
+                  <span class="metric-val" id="metric-f1-score">--%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Explainable AI: How it Works Grid -->
+        <div class="glass-card xai-how-it-works scroll-reveal">
+          <h3 class="panel-heading">
+            <i data-lucide="info" class="info-icon"></i>
+            <span>How the KNN Classification Pipeline Works</span>
+          </h3>
+          <div class="xai-steps-grid">
+            <div class="xai-step-block">
+              <h5>1. Feature Preprocessing</h5>
+              <p>User inputs are standardized in real-time using Z-score scaling calculated from dataset means and standard deviations, matching the model's training scale.</p>
+            </div>
+            <div class="xai-step-block">
+              <h5>2. Proximity Search</h5>
+              <p>The system calculates 4-dimensional Euclidean distances from the query vector to all stored training instances in client memory.</p>
+            </div>
+            <div class="xai-step-block">
+              <h5>3. Neighborhood Voting</h5>
+              <p>The engine selects the <strong>k = 5</strong> closest instances. These neighbors cast category votes, resolving any splits via distance-based tie-breakers.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="container footer-content">
+      <p>&copy; 2026 BloomSphere AI classification model project. All rights reserved.</p>
+      <div class="footer-badge">AI Internship Project</div>
+    </div>
+  </footer>
+
+  <script src="/src/js/main.js" type="module"></script>
+</body>
+</html>
