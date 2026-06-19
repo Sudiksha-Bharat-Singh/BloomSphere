@@ -2434,9 +2434,9 @@ body {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end; /* Align the visualizer to the right side */
   width: 100%;
-  height: 520px;
+  height: 600px; /* Increased from 520px to support a larger flower */
   overflow: visible;
 }
 
@@ -2554,7 +2554,7 @@ body {
 .hologram-rings {
   position: absolute;
   bottom: 0px;
-  width: 300px;
+  width: 380px;
   height: 60px;
   perspective: 1000px;
   display: flex;
@@ -2574,15 +2574,15 @@ body {
 }
 
 .ring-1 {
-  width: 280px;
-  height: 280px;
+  width: 360px;
+  height: 360px;
   border-color: rgba(168, 85, 247, 0.35);
   animation-duration: 8s;
 }
 
 .ring-2 {
-  width: 200px;
-  height: 200px;
+  width: 260px;
+  height: 260px;
   border-color: rgba(139, 92, 246, 0.25);
   border-style: dashed;
   animation-duration: 12s;
@@ -2590,8 +2590,8 @@ body {
 }
 
 .ring-3 {
-  width: 120px;
-  height: 120px;
+  width: 160px;
+  height: 160px;
   border-color: rgba(192, 132, 252, 0.5);
   box-shadow: 0 0 25px rgba(192, 132, 252, 0.4);
   animation-duration: 6s;
@@ -2656,17 +2656,18 @@ body {
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 100%;
+  max-width: 580px; /* Constrained to match scaled flower and align right */
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-left: auto; /* Aligns container to the right edge of the visual column */
 }
 
 .hero-iris-svg {
-  width: 90%;
-  max-width: 460px; /* Increased from 320px to occupy 70-80% of visualizer area */
+  width: 100%;
+  max-width: 580px; /* Increased to occupy 80% of right-side visual column */
   height: auto;
   filter: drop-shadow(0 15px 35px rgba(139, 92, 246, 0.45));
   animation: float-flower-hologram 6s infinite ease-in-out;
@@ -2682,8 +2683,8 @@ body {
 
 .hero-visual-glow {
   position: absolute;
-  width: 460px; /* Scaled matching the flower size */
-  height: 460px;
+  width: 580px; /* Scaled matching the flower size */
+  height: 580px;
   background: radial-gradient(circle, rgba(168, 85, 247, 0.35) 0%, rgba(139, 92, 246, 0) 70%);
   border-radius: 50%;
   filter: blur(55px);
