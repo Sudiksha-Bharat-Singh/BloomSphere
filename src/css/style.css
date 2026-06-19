@@ -2735,6 +2735,31 @@ body {
     gap: 20px;
   }
   
+  .iris-illustration-container {
+    height: 420px;
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-iris-svg {
+    max-width: 280px; /* Scale down on mobile to fit nicely */
+  }
+
+  .hero-visual-glow {
+    width: 280px;
+    height: 280px;
+  }
+
+  .hologram-rings {
+    width: 200px;
+  }
+  .ring-1 { width: 180px; height: 180px; }
+  .ring-2 { width: 130px; height: 130px; }
+  .ring-3 { width: 80px; height: 80px; }
+  
   .connector-lines-svg {
     display: none; /* Hide connector lines on mobile to avoid clutter */
   }
