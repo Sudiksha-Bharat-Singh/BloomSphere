@@ -281,7 +281,7 @@ body {
   justify-content: center;
   padding-top: 120px;
   padding-bottom: 60px;
-  z-index: 10;
+  z-index: auto;
 }
 
 .hero-container {
@@ -2553,7 +2553,7 @@ body {
 /* Holographic Base Platforms / Rings Beneath Flower */
 .hologram-rings {
   position: absolute;
-  bottom: 40px;
+  bottom: 85px;
   width: 260px;
   height: 60px;
   perspective: 1000px;
@@ -2654,7 +2654,6 @@ body {
 /* Expanded Illustration Container and Sizing */
 .iris-illustration-container {
   position: relative;
-  z-index: 2;
   width: 100%;
   max-width: 380px; /* Constrained to match scaled flower and align right */
   height: 100%;
@@ -2672,7 +2671,6 @@ body {
   mix-blend-mode: screen; /* Eliminates black pixels for organic integration */
   filter: drop-shadow(0 15px 35px rgba(139, 92, 246, 0.45));
   animation: float-flower-hologram 6s infinite ease-in-out;
-  z-index: 2;
   position: relative;
   margin-bottom: 20px;
 }
