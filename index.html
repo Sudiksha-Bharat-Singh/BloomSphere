@@ -94,78 +94,52 @@
           <!-- Circular glowing gradient background -->
           <div class="hero-visual-glow"></div>
           
+          <!-- Soft Ambient Particles -->
+          <div class="ambient-particles">
+            <span class="particle p-1"></span>
+            <span class="particle p-2"></span>
+            <span class="particle p-3"></span>
+            <span class="particle p-4"></span>
+            <span class="particle p-5"></span>
+            <span class="particle p-6"></span>
+          </div>
+
           <!-- SVG Dotted Connector Lines -->
-          <svg class="connector-lines-svg" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M 75 80 Q 150 70 200 150" class="connector-line-path" />
-            <path d="M 75 300 Q 130 300 170 240" class="connector-line-path" />
-            <path d="M 325 55 Q 260 70 215 155" class="connector-line-path" />
-            <path d="M 325 300 Q 275 300 230 250" class="connector-line-path" />
+          <svg class="connector-lines-svg" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 50 120 C 120 120, 180 150, 200 210" class="connector-line-path" />
+            <path d="M 50 380 C 120 380, 170 340, 210 290" class="connector-line-path" />
+            <path d="M 450 120 C 380 120, 320 150, 300 210" class="connector-line-path" />
+            <path d="M 450 380 C 380 380, 330 340, 290 290" class="connector-line-path" />
           </svg>
 
-          <!-- Floating Tags -->
-          <div class="floating-tag floating-tag-1" style="top: 15%; left: 5%;">
-            Sepal Length <span>5.80 cm</span>
+          <!-- Floating Measurement Cards -->
+          <div class="floating-tag floating-tag-1" style="top: 20%; left: 0%;">
+            <div class="tag-title">Sepal Length</div>
+            <div class="tag-val">5.80 <span>cm</span></div>
           </div>
-          <div class="floating-tag floating-tag-2" style="bottom: 20%; left: 5%;">
-            Sepal Width <span>2.70 cm</span>
+          <div class="floating-tag floating-tag-2" style="bottom: 20%; left: 0%;">
+            <div class="tag-title">Sepal Width</div>
+            <div class="tag-val">2.70 <span>cm</span></div>
           </div>
-          <div class="floating-tag floating-tag-3" style="top: 10%; right: 5%;">
-            Petal Length <span>4.35 cm</span>
+          <div class="floating-tag floating-tag-3" style="top: 20%; right: 0%;">
+            <div class="tag-title">Petal Length</div>
+            <div class="tag-val">4.35 <span>cm</span></div>
           </div>
-          <div class="floating-tag floating-tag-4" style="bottom: 20%; right: 5%;">
-            Petal Width <span>1.30 cm</span>
+          <div class="floating-tag floating-tag-4" style="bottom: 20%; right: 0%;">
+            <div class="tag-title">Petal Width</div>
+            <div class="tag-val">1.30 <span>cm</span></div>
           </div>
-          
-          <!-- Large Iris Flower Illustration -->
+
+          <!-- Large Iris Flower Illustration with Holographic Base -->
           <div class="iris-illustration-container">
-            <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" class="hero-iris-svg">
-              <circle cx="200" cy="200" r="160" fill="url(#hero-iris-glow-grad)" opacity="0.2" />
-              <g class="flower-structure">
-                <path d="M200 220 C100 240, 60 340, 200 380 C340 340, 300 240, 200 220 Z" fill="url(#hero-petal-grad-bottom)" opacity="0.4" stroke="url(#hero-petal-stroke-bottom)" stroke-width="2"/>
-                <path d="M200 220 C110 210, 80 140, 100 260 C120 380, 200 350, 200 220 Z" fill="url(#hero-petal-grad-mid)" opacity="0.3" stroke="url(#hero-petal-stroke-mid)" stroke-width="1.5"/>
-                <path d="M200 220 C290 210, 320 140, 300 260 C280 380, 200 350, 200 220 Z" fill="url(#hero-petal-grad-mid)" opacity="0.3" stroke="url(#hero-petal-stroke-mid)" stroke-width="1.5"/>
-                <path d="M200 220 C120 120, 150 40, 200 80 C250 40, 280 120, 200 220 Z" fill="url(#hero-petal-grad-top)" fill-opacity="0.6" stroke="url(#hero-petal-stroke-top)" stroke-width="2.5"/>
-                <path d="M200 220 C140 160, 110 80, 160 100 C210 120, 200 220, 200 220 Z" fill="url(#hero-petal-grad-top-side)" fill-opacity="0.5" stroke="url(#hero-petal-stroke-top)" stroke-width="2"/>
-                <path d="M200 220 C260 160, 290 80, 240 100 C190 120, 200 220, 200 220 Z" fill="url(#hero-petal-grad-top-side)" fill-opacity="0.5" stroke="url(#hero-petal-stroke-top)" stroke-width="2"/>
-                <circle cx="200" cy="210" r="28" fill="#C084FC" filter="blur(4px)" opacity="0.6"/>
-                <circle cx="200" cy="210" r="16" fill="#FFFFFF" filter="blur(1px)"/>
-              </g>
-              <defs>
-                <linearGradient id="hero-petal-grad-top" x1="200" y1="50" x2="200" y2="220">
-                  <stop offset="0%" stop-color="#C084FC"/>
-                  <stop offset="50%" stop-color="#A855F7"/>
-                  <stop offset="100%" stop-color="#8B5CF6"/>
-                </linearGradient>
-                <linearGradient id="hero-petal-grad-top-side" x1="120" y1="80" x2="200" y2="220">
-                  <stop offset="0%" stop-color="#E9D5FF"/>
-                  <stop offset="100%" stop-color="#8B5CF6"/>
-                </linearGradient>
-                <linearGradient id="hero-petal-grad-mid" x1="100" y1="180" x2="200" y2="350">
-                  <stop offset="0%" stop-color="#A855F7"/>
-                  <stop offset="100%" stop-color="#4C1D95"/>
-                </linearGradient>
-                <linearGradient id="hero-petal-grad-bottom" x1="200" y1="220" x2="200" y2="380">
-                  <stop offset="0%" stop-color="#8B5CF6"/>
-                  <stop offset="100%" stop-color="#1E1B4B"/>
-                </linearGradient>
-                <linearGradient id="hero-petal-stroke-top" x1="200" y1="50" x2="200" y2="220">
-                  <stop offset="0%" stop-color="#E9D5FF"/>
-                  <stop offset="100%" stop-color="#A855F7"/>
-                </linearGradient>
-                <linearGradient id="hero-petal-stroke-mid" x1="100" y1="180" x2="200" y2="350">
-                  <stop offset="0%" stop-color="#C084FC"/>
-                  <stop offset="100%" stop-color="#8B5CF6"/>
-                </linearGradient>
-                <linearGradient id="hero-petal-stroke-bottom" x1="200" y1="220" x2="200" y2="380">
-                  <stop offset="0%" stop-color="#A855F7"/>
-                  <stop offset="100%" stop-color="#4C1D95"/>
-                </linearGradient>
-                <radialGradient id="hero-iris-glow-grad" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stop-color="#A855F7"/>
-                  <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
-                </radialGradient>
-              </defs>
-            </svg>
+            <!-- Glowing Platforms / Holographic Rings Beneath Flower -->
+            <div class="hologram-rings">
+              <div class="hologram-ring ring-1"></div>
+              <div class="hologram-ring ring-2"></div>
+              <div class="hologram-ring ring-3"></div>
+            </div>
+            
+            <img src="/flower.png" alt="Iris Flower" class="hero-iris-svg" style="z-index: 2; position: relative;">
           </div>
         </div>
       </div>
