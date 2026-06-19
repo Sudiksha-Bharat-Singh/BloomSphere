@@ -7,7 +7,7 @@ import { irisDataset } from './dataset.js';
 import { calculateStats, standardizeDataset, standardizeSample } from './preprocessing.js';
 import { KNNClassifier } from './knn.js';
 import { evaluateModel } from './evaluation.js';
-import { initSliders, renderPredictionResult, renderMetricsDashboard, togglePredictionView } from './ui.js';
+import { initSliders, renderPredictionResult, renderMetricsDashboard, renderConfusionMatrix, initDatasetExplorer, togglePredictionView } from './ui.js';
 
 // 1. Central State Object
 const state = {
@@ -44,8 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log(`F1 Score: ${(state.evaluationResults.f1Score * 100).toFixed(2)}%`);
     console.log('Confusion Matrix calculated:', state.evaluationResults.confusionMatrix);
 
-    // Render metrics on the dashboard panel
+    // Render metrics on the dashboard panels
     renderMetricsDashboard(state.evaluationResults);
+    renderConfusionMatrix(state.evaluationResults.confusionMatrix);
+    initDatasetExplorer(state.rawDataset);
   } catch (error) {
     console.error('Error during ML engine initialization:', error);
   }
@@ -74,8 +76,12 @@ document.addEventListener('DOMContentLoaded', () => {
     rootMargin: '0px 0px -50px 0px'
   });
   revealElements.forEach(el => revealObserver.observe(el));
+  
+  // Set reveal to true immediately for dashboard grid elements to prevent initial loading blank states
+  const dashEl = document.getElementById('dashboard');
+  if (dashEl) dashEl.classList.add('revealed');
 
-  // 4. Set Up SPA View Routing Toggles
+  // 4. Set Up SPA View Routing Toggles / Smooth Scroll
   const startPredictBtns = [
     document.getElementById('btn-header-start'),
     document.getElementById('btn-hero-start')
@@ -85,34 +91,62 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btn) {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
-        
-        // Toggle view based on header state
-        const isBackToHome = document.body.classList.contains('prediction-active') && e.currentTarget.id === 'btn-header-start';
-        
-        if (isBackToHome) {
-          togglePredictionView(false);
-        } else {
-          togglePredictionView(true);
-        }
+        togglePredictionView(true);
       });
     }
   });
 
-  // Logo click triggers home view restoration
+  const exploreBtn = document.getElementById('btn-hero-explore');
+  if (exploreBtn) {
+    exploreBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetEl = document.querySelector('.why-card-column');
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  }
+
+  // Logo click triggers home view restoration (scroll to top)
   const logoBtn = document.querySelector('.logo-group');
   if (logoBtn) {
     logoBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      togglePredictionView(false);
+      const navLinks = document.querySelectorAll('.nav-link');
+      navLinks.forEach(l => l.classList.remove('active'));
+      const homeLink = document.getElementById('nav-link-home');
+      if (homeLink) homeLink.classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 
-  // Nav link clicks restore home view before navigating to target hash
+  // Nav link clicks for smooth scrolling and active tab management
   const navLinks = document.querySelectorAll('.nav-link');
   navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
-      togglePredictionView(false);
+      e.preventDefault();
+      navLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+
+      const targetId = link.getAttribute('href').substring(1);
+      let targetEl = null;
+
+      if (targetId === '') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      if (link.id === 'nav-link-results') {
+        targetEl = document.querySelector('.metrics-card-column');
+      } else if (link.id === 'nav-link-about') {
+        targetEl = document.querySelector('.why-card-column');
+      } else {
+        targetEl = document.getElementById(targetId);
+      }
+
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     });
   });
 
@@ -131,7 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
         'petal-width',
         'res-placeholder',
         'res-output',
-        'res-error',
         'res-badge',
         'res-species-name',
         'res-scientific-name',
@@ -218,11 +251,9 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(`Prediction did not return a valid species. Returned: ${prediction ? prediction.species : 'undefined'}`);
       }
 
-      // If hidden, automatically reveal the result container
-      if (card.classList.contains('hidden')) {
-        card.classList.remove('hidden');
-      }
-      card.style.display = '';
+      // Reveal card
+      card.classList.remove('hidden');
+      card.style.display = 'block';
       if (!card.classList.contains('revealed')) {
         card.classList.add('revealed');
       }
@@ -237,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (error) {
       console.error('Prediction failed with error:', error);
 
-      // If prediction fails, show "Prediction Error - Check Console"
+      // If prediction fails, show "Prediction Error"
       const placeholder = document.getElementById('res-placeholder');
       const output = document.getElementById('res-output');
       const card = document.getElementById('prediction-result-card');
@@ -245,17 +276,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (card) {
         if (placeholder) placeholder.classList.add('hidden');
         if (output) output.classList.add('hidden');
+        card.classList.remove('hidden');
+        card.style.display = 'block';
 
-        // Reveal card if hidden
-        if (card.classList.contains('hidden')) {
-          card.classList.remove('hidden');
-        }
-        card.style.display = '';
-        if (!card.classList.contains('revealed')) {
-          card.classList.add('revealed');
-        }
-
-        // Show error message
         let errorDiv = document.getElementById('res-error');
         if (!errorDiv) {
           errorDiv = document.createElement('div');

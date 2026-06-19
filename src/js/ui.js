@@ -1,9 +1,10 @@
 /**
  * BloomSphere UI Module
- * Handles DOM manipulation, view toggles, range sliders, results and metrics rendering.
+ * Handles DOM manipulation, range sliders, dataset table rendering, circular gauges,
+ * confusion matrix coloring, and custom prediction confidence breakdowns.
  */
 
-// Species descriptions and classes matching Phase 3
+// Species descriptions matching classification classes
 const speciesDetails = {
   setosa: {
     name: 'Iris Setosa',
@@ -32,7 +33,7 @@ const speciesDetails = {
 };
 
 /**
- * Initializes sliders and ties inputs to value counters.
+ * Initializes sliders and ties inputs to value displays.
  */
 export function initSliders() {
   const sliders = [
@@ -54,7 +55,74 @@ export function initSliders() {
 }
 
 /**
- * Renders the prediction outcome on the Result Card.
+ * Helper to update SVG progress circle dash offset.
+ */
+function setCircleProgress(id, percentage) {
+  const circle = document.getElementById(id);
+  if (circle) {
+    const circumference = 251.2; // 2 * pi * r (40)
+    const offset = circumference - (percentage / 100) * circumference;
+    circle.style.strokeDashoffset = offset;
+  }
+}
+
+/**
+ * Updates the Model Evaluation dashboard circular metrics.
+ * @param {Object} results - Evaluation results metrics.
+ */
+export function renderMetricsDashboard(results) {
+  const accuracyEl = document.getElementById('metric-accuracy');
+  const precisionEl = document.getElementById('metric-precision');
+  const recallEl = document.getElementById('metric-recall');
+  const f1El = document.getElementById('metric-f1-score');
+
+  const accPct = results.accuracy * 100;
+  const precPct = results.precision * 100;
+  const recPct = results.recall * 100;
+  const f1Pct = results.f1Score * 100;
+
+  if (accuracyEl) accuracyEl.textContent = `${accPct.toFixed(1)}%`;
+  if (precisionEl) precisionEl.textContent = `${precPct.toFixed(1)}%`;
+  if (recallEl) recallEl.textContent = `${recPct.toFixed(1)}%`;
+  if (f1El) f1El.textContent = `${f1Pct.toFixed(1)}%`;
+
+  // Animate circles
+  setCircleProgress('circle-accuracy', accPct);
+  setCircleProgress('circle-precision', precPct);
+  setCircleProgress('circle-recall', recPct);
+  setCircleProgress('circle-f1', f1Pct);
+}
+
+/**
+ * Renders the 3x3 Confusion Matrix with actual evaluation values.
+ * @param {Array} matrix - 3x3 matrix from model evaluation.
+ */
+export function renderConfusionMatrix(matrix) {
+  if (!matrix || matrix.length !== 3) return;
+
+  for (let r = 0; r < 3; r++) {
+    for (let c = 0; c < 3; c++) {
+      const cell = document.getElementById(`cm-${r}-${c}`);
+      if (cell) {
+        const val = matrix[r][c];
+        cell.textContent = val;
+
+        // Reset classes
+        cell.className = 'matrix-value-cell';
+        if (r === c) {
+          // Diagonal: correct predictions
+          cell.classList.add('matrix-correct');
+        } else if (val > 0) {
+          // Off-diagonal: incorrect predictions
+          cell.classList.add('matrix-incorrect');
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Renders the prediction outcome on the Result Card inside Prediction Workspace.
  * @param {Object} prediction - Output of KNN classifier predict().
  * @param {Object} rawQuery - Unscaled query parameters entered by user.
  */
@@ -66,26 +134,20 @@ export function renderPredictionResult(prediction, rawQuery) {
   const card = document.getElementById('prediction-result-card');
   const errorDiv = document.getElementById('res-error');
 
-  // Verify the prediction result container exists in the DOM
   if (!card) {
-    console.error('Prediction result container (#prediction-result-card) does not exist in the DOM.');
+    console.error('Prediction result container (#prediction-result-card) is missing in DOM.');
     return;
   }
   if (!placeholder || !output) {
-    console.error('DOM elements inside result container missing:', { placeholder, output });
+    console.error('Required DOM components inside result container missing:', { placeholder, output });
     return;
   }
 
-  // If hidden, automatically reveal it after prediction
-  if (card.classList.contains('hidden')) {
-    card.classList.remove('hidden');
-  }
-  card.style.display = '';
-  if (!card.classList.contains('revealed')) {
-    card.classList.add('revealed');
-  }
+  // Reveal card
+  card.classList.remove('hidden');
+  card.style.display = 'block';
 
-  // If error was previously visible, hide it
+  // Hide any previous errors
   if (errorDiv) {
     errorDiv.classList.add('hidden');
   }
@@ -100,11 +162,11 @@ export function renderPredictionResult(prediction, rawQuery) {
     icon: 'help-circle'
   };
 
-  // Remove previous result glows and empty state, preserving structural classes
-  card.classList.remove('empty-state', 'prediction-setosa', 'prediction-versicolor', 'prediction-virginica', 'prediction-unknown');
+  // Restyle border and glows based on species
+  card.className = 'glass-card result-card scroll-reveal revealed';
+  card.classList.add(info.glowClass);
   card.style.borderColor = '';
   card.style.boxShadow = '';
-  card.classList.add(info.glowClass);
 
   // Set values
   document.getElementById('res-badge').textContent = info.badge;
@@ -118,18 +180,42 @@ export function renderPredictionResult(prediction, rawQuery) {
     iconWrapper.innerHTML = `<i data-lucide="${info.icon}"></i>`;
   }
 
+  // Draw Confidence Breakdown
+  const confidenceList = document.getElementById('res-confidence-list');
+  if (confidenceList && prediction.votes) {
+    confidenceList.innerHTML = '';
+    const k = prediction.neighbors.length || 5;
+    const classes = ['setosa', 'versicolor', 'virginica'];
+
+    classes.forEach(sp => {
+      const count = prediction.votes[sp] || 0;
+      const percentage = (count / k) * 100;
+
+      const item = document.createElement('div');
+      item.className = 'confidence-item';
+      item.innerHTML = `
+        <div class="confidence-info">
+          <span class="confidence-name">${sp}</span>
+          <span class="confidence-pct">${percentage.toFixed(0)}%</span>
+        </div>
+        <div class="confidence-bar-bg">
+          <div class="confidence-bar-fill" style="width: ${percentage}%"></div>
+        </div>
+      `;
+      confidenceList.appendChild(item);
+    });
+  }
+
   // Render neighbors breakdown
   const neighborsList = document.getElementById('res-neighbors-list');
   if (neighborsList) {
     neighborsList.innerHTML = '';
     
-    // Take the nearest neighbors and display their distance and class
     prediction.neighbors.forEach((neighbor, idx) => {
       const neighborSpecies = neighbor.species.charAt(0).toUpperCase() + neighbor.species.slice(1);
       const neighborItem = document.createElement('div');
       neighborItem.className = 'neighbor-item';
       
-      // Highlight if same species
       const isMatch = neighbor.species.toLowerCase() === speciesName;
       const matchBadge = isMatch ? '<span class="neighbor-match">Vote</span>' : '';
 
@@ -146,9 +232,6 @@ export function renderPredictionResult(prediction, rawQuery) {
   // Toggle visible elements
   placeholder.classList.add('hidden');
   output.classList.remove('hidden');
-
-  // Ensure card is revealed
-  card.classList.add('revealed');
 
   // Trigger Lucide to parse new icons
   if (typeof lucide !== 'undefined') {
@@ -178,73 +261,116 @@ export function renderPredictionResult(prediction, rawQuery) {
 }
 
 /**
- * Updates the Model Evaluation dashboard.
- * @param {Object} results - Evaluation results metrics.
+ * Initializes the Dataset Explorer and Full Dataset Modal.
+ * @param {Array} dataset - Original raw dataset array.
  */
-export function renderMetricsDashboard(results) {
-  const accuracyEl = document.getElementById('metric-accuracy');
-  const precisionEl = document.getElementById('metric-precision');
-  const recallEl = document.getElementById('metric-recall');
-  const f1El = document.getElementById('metric-f1-score');
+export function initDatasetExplorer(dataset) {
+  const tableBody = document.getElementById('dataset-table-body');
+  const modalTableBody = document.getElementById('dataset-modal-table-body');
+  const searchInput = document.getElementById('dataset-search');
+  const countBadge = document.getElementById('dataset-count');
+  
+  const viewAllBtn = document.getElementById('btn-view-all-dataset');
+  const closeModalBtn = document.getElementById('btn-close-modal');
+  const modalOverlay = document.getElementById('dataset-modal-overlay');
 
-  if (accuracyEl) accuracyEl.textContent = `${(results.accuracy * 100).toFixed(1)}%`;
-  if (precisionEl) precisionEl.textContent = `${(results.precision * 100).toFixed(1)}%`;
-  if (recallEl) recallEl.textContent = `${(results.recall * 100).toFixed(1)}%`;
-  if (f1El) f1El.textContent = `${(results.f1Score * 100).toFixed(1)}%`;
+  if (!tableBody || !dataset) return;
+
+  // Species classes mapping
+  const getSpeciesClass = (sp) => {
+    const s = sp.toLowerCase();
+    if (s === 'setosa') return 'species-setosa-cell';
+    if (s === 'versicolor') return 'species-versicolor-cell';
+    if (s === 'virginica') return 'species-virginica-cell';
+    return '';
+  };
+
+  // Render function
+  const renderTables = (data) => {
+    tableBody.innerHTML = '';
+    const first10 = data.slice(0, 10);
+    first10.forEach(sample => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${sample.sepalLength.toFixed(1)}</td>
+        <td>${sample.sepalWidth.toFixed(1)}</td>
+        <td>${sample.petalLength.toFixed(1)}</td>
+        <td>${sample.petalWidth.toFixed(1)}</td>
+        <td class="dataset-species-cell ${getSpeciesClass(sample.species)}">${sample.species}</td>
+      `;
+      tableBody.appendChild(tr);
+    });
+
+    if (modalTableBody) {
+      modalTableBody.innerHTML = '';
+      data.forEach(sample => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${sample.sepalLength.toFixed(1)}</td>
+          <td>${sample.sepalWidth.toFixed(1)}</td>
+          <td>${sample.petalLength.toFixed(1)}</td>
+          <td>${sample.petalWidth.toFixed(1)}</td>
+          <td class="dataset-species-cell ${getSpeciesClass(sample.species)}">${sample.species}</td>
+        `;
+        modalTableBody.appendChild(tr);
+      });
+    }
+
+    if (countBadge) {
+      countBadge.textContent = `Showing ${data.length} of ${dataset.length} records`;
+    }
+  };
+
+  // Initial draw
+  renderTables(dataset);
+
+  // Search input handler
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      const filtered = dataset.filter(sample => {
+        const speciesMatch = sample.species.toLowerCase().includes(query);
+        const sepalMatch = sample.sepalLength.toString().includes(query);
+        const petalMatch = sample.petalLength.toString().includes(query);
+        return speciesMatch || sepalMatch || petalMatch;
+      });
+      renderTables(filtered);
+    });
+  }
+
+  // Modal event hooks
+  if (viewAllBtn && modalOverlay) {
+    viewAllBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      modalOverlay.classList.add('active');
+    });
+  }
+  if (closeModalBtn && modalOverlay) {
+    closeModalBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      modalOverlay.classList.remove('active');
+    });
+  }
+  if (modalOverlay) {
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) {
+        modalOverlay.classList.remove('active');
+      }
+    });
+  }
 }
 
 /**
- * Toggles visibility between Home layout and Prediction Page.
- * @param {boolean} active - Set to true to display Predict page, false for Home.
+ * Toggles visibility or scrolls to components.
+ * @param {boolean} active - Scroll trigger.
  */
 export function togglePredictionView(active) {
-  const body = document.body;
-  const predictSection = document.getElementById('prediction');
-  const homeSections = [
-    document.querySelector('.section-hero'),
-    document.querySelector('.section-stats'),
-    document.querySelector('.section-about'),
-    document.querySelector('.section-species'),
-    document.querySelector('.section-workflow')
-  ];
-
-  const headerBtn = document.getElementById('btn-header-start');
-
-  if (active) {
-    body.classList.add('prediction-active');
-    if (predictSection) predictSection.classList.remove('hidden');
-    homeSections.forEach(section => section && section.classList.add('hidden'));
-    
-    // Force reveal elements inside prediction workspace to bypass intersection delays
-    if (predictSection) {
-      const revealElems = predictSection.querySelectorAll('.scroll-reveal');
-      revealElems.forEach(el => el.classList.add('revealed'));
-    }
-
-    // Scroll to workspace top
-    window.scrollTo({ top: 0, behavior: 'instant' });
-
-    // Update sticky button to Back to Home
-    if (headerBtn) {
-      headerBtn.innerHTML = `
-        <i data-lucide="arrow-left"></i>
-        <span>Back to Home</span>
-      `;
-    }
-  } else {
-    body.classList.remove('prediction-active');
-    if (predictSection) predictSection.classList.add('hidden');
-    homeSections.forEach(section => section && section.classList.remove('hidden'));
-
-    if (headerBtn) {
-      headerBtn.innerHTML = `
-        <span>Start Prediction</span>
-        <i data-lucide="arrow-right"></i>
-      `;
-    }
-  }
-
-  if (typeof lucide !== 'undefined') {
-    lucide.createIcons();
+  const predictCard = document.getElementById('prediction-workspace-card');
+  if (predictCard) {
+    predictCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    predictCard.style.outline = '2px solid var(--color-highlight)';
+    setTimeout(() => {
+      predictCard.style.outline = 'none';
+    }, 1500);
   }
 }
