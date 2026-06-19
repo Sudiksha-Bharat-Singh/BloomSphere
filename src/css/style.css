@@ -286,8 +286,8 @@ body {
 
 .hero-container {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 60px;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 40px;
   align-items: center;
   width: 100%;
 }
@@ -2464,6 +2464,17 @@ body {
   100% { stroke-dashoffset: -20; stroke: rgba(192, 132, 252, 0.2); }
 }
 
+/* Floating Tags Container overlay */
+.floating-tags-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
 /* Apple-style Premium Measurement Cards */
 .floating-tag {
   position: absolute;
@@ -2543,7 +2554,7 @@ body {
 .hologram-rings {
   position: absolute;
   bottom: 0px;
-  width: 240px;
+  width: 300px;
   height: 60px;
   perspective: 1000px;
   display: flex;
@@ -2563,15 +2574,15 @@ body {
 }
 
 .ring-1 {
-  width: 220px;
-  height: 220px;
+  width: 280px;
+  height: 280px;
   border-color: rgba(168, 85, 247, 0.35);
   animation-duration: 8s;
 }
 
 .ring-2 {
-  width: 160px;
-  height: 160px;
+  width: 200px;
+  height: 200px;
   border-color: rgba(139, 92, 246, 0.25);
   border-style: dashed;
   animation-duration: 12s;
@@ -2579,8 +2590,8 @@ body {
 }
 
 .ring-3 {
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   border-color: rgba(192, 132, 252, 0.5);
   box-shadow: 0 0 25px rgba(192, 132, 252, 0.4);
   animation-duration: 6s;
@@ -2654,12 +2665,13 @@ body {
 }
 
 .hero-iris-svg {
-  width: 75%;
-  max-width: 320px;
+  width: 90%;
+  max-width: 460px; /* Increased from 320px to occupy 70-80% of visualizer area */
   height: auto;
   filter: drop-shadow(0 15px 35px rgba(139, 92, 246, 0.45));
   animation: float-flower-hologram 6s infinite ease-in-out;
   z-index: 2;
+  overflow: visible;
 }
 
 @keyframes float-flower-hologram {
@@ -2670,11 +2682,11 @@ body {
 
 .hero-visual-glow {
   position: absolute;
-  width: 380px;
-  height: 380px;
+  width: 460px; /* Scaled matching the flower size */
+  height: 460px;
   background: radial-gradient(circle, rgba(168, 85, 247, 0.35) 0%, rgba(139, 92, 246, 0) 70%);
   border-radius: 50%;
-  filter: blur(50px);
+  filter: blur(55px);
   z-index: 1;
   pointer-events: none;
   animation: pulse-glow-holo 8s infinite alternate ease-in-out;
@@ -2683,6 +2695,80 @@ body {
 @keyframes pulse-glow-holo {
   0% { transform: scale(0.9) translateY(10px); opacity: 0.7; }
   100% { transform: scale(1.2) translateY(-10px); opacity: 1; }
+}
+
+/* Responsive Media Queries to prevent overlapping of flower and cards */
+@media (max-width: 992px) {
+  .hero-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+  .hero-content {
+    align-items: center;
+    text-align: center;
+  }
+  .hero-visual {
+    height: 480px;
+  }
+  .hero-iris-svg {
+    max-width: 360px; /* Slightly scaled down on tablet to maintain spacing */
+  }
+  .hero-visual-glow {
+    width: 360px;
+    height: 360px;
+  }
+  .hologram-rings {
+    width: 240px;
+  }
+  .ring-1 { width: 220px; height: 220px; }
+  .ring-2 { width: 160px; height: 160px; }
+  .ring-3 { width: 100px; height: 100px; }
+}
+
+@media (max-width: 768px) {
+  .hero-visual {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .connector-lines-svg {
+    display: none; /* Hide connector lines on mobile to avoid clutter */
+  }
+  
+  .floating-tags-container {
+    position: relative;
+    width: 100%;
+    height: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 30px;
+    pointer-events: auto;
+    z-index: 5;
+  }
+  
+  .floating-tag {
+    position: relative !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    margin: 0 auto !important;
+    width: 100%;
+    max-width: 220px;
+    animation: none !important; /* Disable individual float animations on mobile grid */
+  }
+}
+
+@media (max-width: 480px) {
+  .floating-tags-container {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
 }
 
 
