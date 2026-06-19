@@ -139,7 +139,106 @@
               <div class="hologram-ring ring-3"></div>
             </div>
             
-            <img src="/flower.png" alt="Iris Flower" class="hero-iris-svg" style="z-index: 2; position: relative;">
+            <!-- Premium Inline SVG Flower Illustration -->
+            <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" class="hero-iris-svg" style="z-index: 2; position: relative;">
+              <defs>
+                <!-- Glow Filter -->
+                <filter id="holo-glow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="8" result="blur" />
+                  <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1.5 0" />
+                  <feMerge>
+                    <feMergeNode />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+
+                <!-- Petal Gradients -->
+                <linearGradient id="stem-grad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.6" />
+                  <stop offset="30%" stop-color="#34D399" />
+                  <stop offset="100%" stop-color="#047857" stop-opacity="0.8" />
+                </linearGradient>
+
+                <linearGradient id="petal-back" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#A855F7" />
+                  <stop offset="100%" stop-color="#4C1D95" />
+                </linearGradient>
+
+                <linearGradient id="petal-left-fall" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#C084FC" />
+                  <stop offset="50%" stop-color="#8B5CF6" />
+                  <stop offset="100%" stop-color="#312E81" />
+                </linearGradient>
+
+                <linearGradient id="petal-right-fall" x1="1" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#C084FC" />
+                  <stop offset="50%" stop-color="#8B5CF6" />
+                  <stop offset="100%" stop-color="#312E81" />
+                </linearGradient>
+
+                <linearGradient id="petal-center-fall" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#E9D5FF" />
+                  <stop offset="40%" stop-color="#A855F7" />
+                  <stop offset="100%" stop-color="#1E1B4B" />
+                </linearGradient>
+
+                <linearGradient id="petal-standards" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#F3E8FF" stop-opacity="0.9" />
+                  <stop offset="50%" stop-color="#C084FC" stop-opacity="0.8" />
+                  <stop offset="100%" stop-color="#7C3AED" stop-opacity="0.4" />
+                </linearGradient>
+
+                <linearGradient id="beard-grad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#FBBF24" />
+                  <stop offset="70%" stop-color="#F59E0B" />
+                  <stop offset="100%" stop-color="#D97706" />
+                </linearGradient>
+
+                <linearGradient id="accent-stroke-grad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.8" />
+                  <stop offset="100%" stop-color="#C084FC" stop-opacity="0.1" />
+                </linearGradient>
+              </defs>
+
+              <!-- Flower Stem -->
+              <path d="M200 240 Q197 320, 203 400" stroke="url(#stem-grad)" stroke-width="6" stroke-linecap="round" fill="none" />
+
+              <!-- Base Sepal Details -->
+              <path d="M190 240 Q200 220, 210 240 L203 270 L197 270 Z" fill="#10B981" opacity="0.8" />
+
+              <!-- Holographic Glow Layer -->
+              <g filter="url(#holo-glow)" opacity="0.85">
+                <!-- Back Petal (Standard Back) -->
+                <path d="M200 240 C150 140, 160 60, 200 60 C240 60, 250 140, 200 240 Z" fill="url(#petal-back)" opacity="0.6" />
+
+                <!-- Left & Right Standards (Upper curved petals) -->
+                <path d="M200 240 C130 180, 110 80, 165 80 C210 80, 200 200, 200 240 Z" fill="url(#petal-standards)" stroke="url(#accent-stroke-grad)" stroke-width="1.5" />
+                <path d="M200 240 C270 180, 290 80, 235 80 C190 80, 200 200, 200 240 Z" fill="url(#petal-standards)" stroke="url(#accent-stroke-grad)" stroke-width="1.5" />
+
+                <!-- Lower Petals (Falls) -->
+                <!-- Left Drooping Fall -->
+                <path d="M200 240 C130 220, 70 240, 75 300 C80 350, 150 330, 200 240 Z" fill="url(#petal-left-fall)" stroke="url(#accent-stroke-grad)" stroke-width="1.5" />
+                <!-- Right Drooping Fall -->
+                <path d="M200 240 C270 220, 330 240, 325 300 C320 350, 250 330, 200 240 Z" fill="url(#petal-right-fall)" stroke="url(#accent-stroke-grad)" stroke-width="1.5" />
+                <!-- Center Drooping Fall -->
+                <path d="M200 240 C140 260, 130 350, 200 370 C270 350, 260 260, 200 240 Z" fill="url(#petal-center-fall)" stroke="url(#accent-stroke-grad)" stroke-width="2" />
+
+                <!-- Beards (Yellow crest details inside lower petals) -->
+                <path d="M200 240 Q175 255, 155 275 Q165 285, 185 270 Z" fill="url(#beard-grad)" opacity="0.9" />
+                <path d="M200 240 Q225 255, 245 275 Q235 285, 215 270 Z" fill="url(#beard-grad)" opacity="0.9" />
+                <path d="M200 240 Q200 270, 200 310 Q205 310, 205 270 Z" fill="url(#beard-grad)" opacity="0.95" />
+                
+                <!-- Neon veins / styling lines -->
+                <path d="M200 240 C180 250, 160 270, 120 290" stroke="rgba(255, 255, 255, 0.4)" stroke-width="1" stroke-dasharray="2 3" />
+                <path d="M200 240 C220 250, 240 270, 280 290" stroke="rgba(255, 255, 255, 0.4)" stroke-width="1" stroke-dasharray="2 3" />
+                <path d="M200 240 C190 270, 180 300, 180 340" stroke="rgba(255, 255, 255, 0.3)" stroke-width="1" stroke-dasharray="3 3" />
+                <path d="M200 240 C210 270, 220 300, 220 340" stroke="rgba(255, 255, 255, 0.3)" stroke-width="1" stroke-dasharray="3 3" />
+              </g>
+
+              <!-- Central core glow nodes -->
+              <circle cx="200" cy="235" r="12" fill="#E9D5FF" filter="blur(3px)" opacity="0.9" />
+              <circle cx="200" cy="235" r="5" fill="#FFFFFF" />
+            </svg>
           </div>
         </div>
       </div>
