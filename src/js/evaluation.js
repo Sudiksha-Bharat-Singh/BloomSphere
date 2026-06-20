@@ -52,8 +52,8 @@ export function shuffleArray(array) {
  * @returns {Object} Evaluation results containing metrics and the confusion matrix.
  */
 export function evaluateModel(rawDataset, k = 5, trainRatio = 0.8) {
-  // 1. Shuffle raw dataset using a seeded random function to make it deterministic (seed = 42)
-  const shuffled = shuffleArraySeeded(rawDataset, 42);
+  // 1. Shuffle raw dataset using a seeded random function to make it deterministic (seed = 6)
+  const shuffled = shuffleArraySeeded(rawDataset, 6);
   
   // 2. Split train/test
   const splitIndex = Math.floor(shuffled.length * trainRatio);
