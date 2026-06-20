@@ -2801,5 +2801,19 @@ body {
   }
 }
 
+/* Ensure all flower image wrappers and container classes are completely borderless and transparent */
+.hero-flower-wrapper,
+.hero-visual-image,
+.flower-container,
+.hero-image,
+.iris-illustration-container,
+.hero-iris-img {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+
 
 
