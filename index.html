@@ -156,48 +156,48 @@
       <div class="dashboard-grid">
         
         <!-- COLUMN 1: Why BloomSphere? -->
-        <div class="why-card-column glass-card" style="padding: 30px;">
-          <h3 class="panel-heading" style="border: none; margin-bottom: 20px; padding-bottom: 0;">
+        <div class="why-card-column glass-card">
+          <h3 class="panel-heading" style="border: none; margin-bottom: 24px; padding-bottom: 0;">
             <i data-lucide="info" class="panel-header-icon"></i>
             <span>Why BloomSphere?</span>
           </h3>
-          <div class="why-item-list">
+          <div class="why-item-grid-2x2">
             <!-- Item 1 -->
-            <div class="why-item">
-              <div class="why-item-icon">
+            <div class="why-item-mini-card">
+              <div class="why-item-icon-prominent">
                 <i data-lucide="cpu"></i>
               </div>
-              <div class="why-item-info">
+              <div class="why-item-info-new">
                 <h4>AI Powered</h4>
                 <p>KNN algorithm for accurate flower classification</p>
               </div>
             </div>
             <!-- Item 2 -->
-            <div class="why-item">
-              <div class="why-item-icon">
+            <div class="why-item-mini-card">
+              <div class="why-item-icon-prominent">
                 <i data-lucide="database"></i>
               </div>
-              <div class="why-item-info">
+              <div class="why-item-info-new">
                 <h4>Real Dataset</h4>
                 <p>Trained on the classic Iris dataset (150 samples)</p>
               </div>
             </div>
             <!-- Item 3 -->
-            <div class="why-item">
-              <div class="why-item-icon">
+            <div class="why-item-mini-card">
+              <div class="why-item-icon-prominent">
                 <i data-lucide="zap"></i>
               </div>
-              <div class="why-item-info">
+              <div class="why-item-info-new">
                 <h4>Instant Results</h4>
                 <p>Get predictions in real-time with confidence scores</p>
               </div>
             </div>
             <!-- Item 4 -->
-            <div class="why-item">
-              <div class="why-item-icon">
+            <div class="why-item-mini-card">
+              <div class="why-item-icon-prominent">
                 <i data-lucide="graduation-cap"></i>
               </div>
-              <div class="why-item-info">
+              <div class="why-item-info-new">
                 <h4>Educational</h4>
                 <p>Perfect for learning ML concepts interactively</p>
               </div>
@@ -209,7 +209,7 @@
         <div class="metrics-card-column">
           
           <!-- Dataset Overview -->
-          <div class="glass-card" style="padding: 24px;">
+          <div class="glass-card">
             <div class="card-header-row">
               <h3>Dataset Overview</h3>
               <a href="#dataset-explorer" class="btn-card-action">View All</a>
@@ -243,7 +243,7 @@
           </div>
 
           <!-- Model Performance -->
-          <div class="glass-card" style="padding: 24px;">
+          <div class="glass-card">
             <div class="card-header-row">
               <h3>Model Performance</h3>
               <a href="#workflow" class="btn-card-action">View Details</a>
@@ -320,7 +320,7 @@
           </div>
 
           <!-- Confusion Matrix Card -->
-          <div class="glass-card" style="padding: 24px;">
+          <div class="glass-card">
             <h3 class="panel-heading" style="border: none; margin-bottom: 4px; padding-bottom: 0;">
               <i data-lucide="grid" class="panel-header-icon"></i>
               <span>Confusion Matrix</span>
@@ -365,14 +365,14 @@
         </div>
 
         <!-- COLUMN 3: Prediction Workspace -->
-        <div class="glass-card" style="padding: 30px;" id="prediction-workspace-card">
+        <div class="glass-card" id="prediction-workspace-card">
           <h3 class="panel-heading" style="border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 16px; margin-bottom: 16px;">
             <i data-lucide="cpu" class="panel-header-icon"></i>
             <span>Prediction Workspace</span>
           </h3>
           <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 24px;">Enter flower measurements (in cm)</p>
           
-          <form id="prediction-form" class="prediction-form" style="gap: 20px;">
+          <form id="prediction-form" class="prediction-form">
             <!-- Sepal Length Slider -->
             <div class="slider-group">
               <div class="slider-header" style="margin-bottom: 4px;">
