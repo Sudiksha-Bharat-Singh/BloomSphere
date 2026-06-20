@@ -4,42 +4,74 @@
  */
 
 import { KNNClassifier } from './knn.js';
+import { calculateStats, standardizeDataset } from './preprocessing.js';
 
 /**
- * Fisher-Yates shuffle algorithm to randomize array order.
+ * Creates a seeded random number generator (LCG).
+ * @param {number} seed - Seed value.
+ * @returns {Function} Generator function returning numbers in [0, 1).
+ */
+function createSeededRandom(seed) {
+  let s = seed;
+  return function() {
+    s = (s * 1664525 + 1013904223) % 4294967296;
+    return s / 4294967296;
+  };
+}
+
+/**
+ * Fisher-Yates shuffle algorithm using a seeded random generator for reproducibility.
  * @param {Array} array - Original array.
+ * @param {number} seed - Seed value.
  * @returns {Array} Shuffled copy of the array.
  */
-export function shuffleArray(array) {
+export function shuffleArraySeeded(array, seed = 42) {
   const arr = [...array];
+  const random = createSeededRandom(seed);
   for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
   return arr;
 }
 
 /**
+ * Fisher-Yates shuffle algorithm to randomize array order (kept for backward compatibility).
+ * @param {Array} array - Original array.
+ * @returns {Array} Shuffled copy of the array.
+ */
+export function shuffleArray(array) {
+  return shuffleArraySeeded(array, Math.floor(Math.random() * 1000));
+}
+
+/**
  * Evaluates the model performance using a train-test split.
- * @param {Array} standardizedDataset - Preprocessed (scaled) Iris dataset.
+ * @param {Array} rawDataset - Unprocessed Iris dataset.
  * @param {number} k - Number of nearest neighbors (default 5).
  * @param {number} trainRatio - Partition ratio for training (default 0.8).
  * @returns {Object} Evaluation results containing metrics and the confusion matrix.
  */
-export function evaluateModel(standardizedDataset, k = 5, trainRatio = 0.8) {
-  // 1. Shuffle
-  const shuffled = shuffleArray(standardizedDataset);
+export function evaluateModel(rawDataset, k = 5, trainRatio = 0.8) {
+  // 1. Shuffle raw dataset using a seeded random function to make it deterministic (seed = 42)
+  const shuffled = shuffleArraySeeded(rawDataset, 42);
   
   // 2. Split train/test
   const splitIndex = Math.floor(shuffled.length * trainRatio);
-  const trainSet = shuffled.slice(0, splitIndex);
-  const testSet = shuffled.slice(splitIndex);
+  const rawTrainSet = shuffled.slice(0, splitIndex);
+  const rawTestSet = shuffled.slice(splitIndex);
 
-  // 3. Initialize KNN classifier
+  // 3. Compute scaling statistics *only* on the training set (proper Z-score scaling, preventing data leakage!)
+  const trainStats = calculateStats(rawTrainSet);
+  
+  // 4. Standardize both sets using trainStats
+  const trainSet = standardizeDataset(rawTrainSet, trainStats);
+  const testSet = standardizeDataset(rawTestSet, trainStats);
+
+  // 5. Initialize KNN classifier
   const knn = new KNNClassifier(k);
   knn.setTrainingData(trainSet);
 
-  // 4. Initialize Confusion Matrix
+  // 6. Initialize Confusion Matrix
   // Indexes: Setosa = 0, Versicolor = 1, Virginica = 2
   const classMap = {
     'setosa': 0,
@@ -55,7 +87,7 @@ export function evaluateModel(standardizedDataset, k = 5, trainRatio = 0.8) {
 
   let correctCount = 0;
 
-  // 5. Evaluate on Test Set
+  // 7. Evaluate on Test Set
   testSet.forEach(sample => {
     const actualLabel = sample.species.toLowerCase();
     const actualIdx = classMap[actualLabel];
@@ -79,11 +111,11 @@ export function evaluateModel(standardizedDataset, k = 5, trainRatio = 0.8) {
     confusionMatrix[actualIdx][predIdx]++;
   });
 
-  // 6. Calculate accuracy
+  // 8. Calculate accuracy
   const totalTest = testSet.length;
   const accuracy = totalTest > 0 ? correctCount / totalTest : 0;
 
-  // 7. Calculate Precision, Recall, F1 for each class
+  // 9. Calculate Precision, Recall, F1 for each class
   const classMetrics = [0, 1, 2].map(i => {
     const tp = confusionMatrix[i][i];
 
@@ -108,7 +140,7 @@ export function evaluateModel(standardizedDataset, k = 5, trainRatio = 0.8) {
     return { precision, recall, f1 };
   });
 
-  // 8. Compute Macro-averaged metrics
+  // 10. Compute Macro-averaged metrics
   const macroPrecision = classMetrics.reduce((sum, m) => sum + m.precision, 0) / 3;
   const macroRecall = classMetrics.reduce((sum, m) => sum + m.recall, 0) / 3;
   const macroF1 = classMetrics.reduce((sum, m) => sum + m.f1, 0) / 3;

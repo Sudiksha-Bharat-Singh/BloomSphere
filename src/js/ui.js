@@ -104,7 +104,8 @@ export function renderConfusionMatrix(matrix) {
     for (let c = 0; c < 3; c++) {
       const cell = document.getElementById(`cm-${r}-${c}`);
       if (cell) {
-        const val = matrix[r][c];
+        // Transpose to map matrix[Actual][Predicted] to HTML cell cm-r-c (Row r = Predicted, Col c = Actual)
+        const val = matrix[c][r];
         cell.textContent = val;
 
         // Reset classes

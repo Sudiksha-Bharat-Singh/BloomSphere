@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     state.standardizedDataset = standardizeDataset(state.rawDataset, state.stats);
 
     // Automatically run initial model evaluation (split validation)
-    state.evaluationResults = evaluateModel(state.standardizedDataset, state.kValue, state.splitRatio);
+    state.evaluationResults = evaluateModel(state.rawDataset, state.kValue, state.splitRatio);
     
     // Fit a deployment KNN model trained on the full dataset for playground inference
     state.predictorModel = new KNNClassifier(state.kValue);
