@@ -2825,9 +2825,16 @@ body {
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: 1.05fr 1.35fr 1.1fr !important; /* Rebalanced proportions */
-  gap: 40px !important; /* Increased horizontal and vertical spacing */
-  align-items: stretch !important;
+  grid-template-columns: 2fr 1fr !important; /* Left column ~65%, Right column ~35% */
+  gap: 40px !important; /* Spacing between columns */
+  align-items: start !important; /* Align items to top to prevent stretching */
+}
+
+.dashboard-left-col,
+.dashboard-right-col {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 40px !important; /* Spacious vertical gaps between cards */
 }
 
 /* Layered Glassmorphic Card Enhancements */
@@ -3006,36 +3013,153 @@ body {
 }
 
 /* Column 2: Confusion Matrix Card */
+.confusion-matrix-card {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  align-items: stretch !important;
+  min-height: 480px !important;
+}
+
+.confusion-matrix-outer-wrapper {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  flex-grow: 1 !important;
+  margin: 20px 0 !important;
+}
+
+.confusion-matrix-container {
+  display: inline-block !important;
+  background: rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.03) !important;
+  border-radius: 16px !important;
+  padding: 24px 32px !important;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
 .confusion-matrix-table {
-  border-spacing: 8px !important;
-  margin-top: 18px !important;
+  border-collapse: separate !important;
+  border-spacing: 12px !important;
+  margin: 0 auto !important;
 }
 
 .confusion-matrix-table th, 
 .confusion-matrix-table td {
-  padding: 14px 10px !important; /* Increased cell sizes */
-  font-size: 13px !important;
+  padding: 16px 12px !important;
+  font-size: 14px !important;
   border-radius: 8px !important;
-  min-width: 60px !important;
-  height: 52px !important;
+  min-width: 80px !important; /* Scaled cell width up by ~25% */
+  height: 64px !important; /* Scaled cell height up by ~25% */
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.matrix-axis-label-top {
+  font-family: var(--font-headings) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.5px !important;
+  color: var(--color-highlight) !important;
+  text-align: center !important;
+  padding-bottom: 8px !important;
+  border-bottom: 1.5px solid rgba(168, 85, 247, 0.25) !important;
+}
+
+.matrix-axis-label-left-cell {
+  vertical-align: middle !important;
+  border: none !important;
+  background: transparent !important;
+  padding: 0 16px 0 0 !important;
+}
+
+.matrix-axis-label-left {
+  writing-mode: vertical-rl !important;
+  transform: rotate(180deg) !important;
+  font-family: var(--font-headings) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.5px !important;
+  color: var(--color-highlight) !important;
+  text-align: center !important;
+  padding-left: 8px !important;
+  border-left: 1.5px solid rgba(168, 85, 247, 0.25) !important;
 }
 
 .matrix-header-cell {
   background: rgba(255, 255, 255, 0.03) !important;
   border: 1px solid rgba(255, 255, 255, 0.06) !important;
   font-size: 12px !important;
+  font-weight: 600 !important;
+  color: var(--text-dim) !important;
 }
 
 .matrix-value-cell {
   background: rgba(20, 15, 30, 0.6) !important;
   border: 1.5px solid rgba(255, 255, 255, 0.08) !important;
-  font-size: 15px !important;
+  font-size: 16px !important;
   font-weight: 700 !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.3s ease !important;
 }
 
-.matrix-label-axis {
-  font-size: 10px !important;
-  letter-spacing: 1.2px !important;
+.matrix-correct {
+  background: rgba(52, 211, 153, 0.12) !important;
+  border-color: rgba(52, 211, 153, 0.4) !important;
+  color: #34d399 !important;
+  text-shadow: 0 0 10px rgba(52, 211, 153, 0.4) !important;
+  box-shadow: 0 4px 15px rgba(52, 211, 153, 0.15) !important;
+}
+
+.matrix-incorrect {
+  background: rgba(239, 68, 68, 0.12) !important;
+  border-color: rgba(239, 68, 68, 0.4) !important;
+  color: #ef4444 !important;
+  text-shadow: 0 0 10px rgba(239, 68, 68, 0.4) !important;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.15) !important;
+}
+
+/* Summary Footer inside Confusion Matrix Card */
+.matrix-summary-footer {
+  display: flex !important;
+  justify-content: space-around !important;
+  align-items: center !important;
+  margin-top: 16px !important;
+  padding-top: 20px !important;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.matrix-summary-item {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+.matrix-summary-label {
+  font-size: 11px !important;
+  color: var(--text-muted) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.8px !important;
+}
+
+.matrix-summary-value {
+  font-size: 20px !important;
+  font-weight: 800 !important;
+}
+
+.text-success {
+  color: #34d399 !important;
+  text-shadow: 0 0 10px rgba(52, 211, 153, 0.3) !important;
+}
+
+.text-error {
+  color: #ef4444 !important;
+  text-shadow: 0 0 10px rgba(239, 68, 68, 0.3) !important;
 }
 
 /* Column 3: Prediction Workspace Card */
@@ -3118,9 +3242,16 @@ body {
   border-top: 1px solid rgba(255,255,255,0.06) !important;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1100px) {
   .dashboard-grid {
-    grid-template-columns: 1.15fr 1fr !important;
+    grid-template-columns: 1.2fr 1fr !important;
+    gap: 32px !important;
+  }
+}
+
+@media (max-width: 992px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr !important;
     gap: 32px !important;
   }
 }

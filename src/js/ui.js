@@ -100,12 +100,22 @@ export function renderMetricsDashboard(results) {
 export function renderConfusionMatrix(matrix) {
   if (!matrix || matrix.length !== 3) return;
 
+  let totalSamples = 0;
+  let correctSamples = 0;
+  let incorrectSamples = 0;
+
   for (let r = 0; r < 3; r++) {
     for (let c = 0; c < 3; c++) {
       const cell = document.getElementById(`cm-${r}-${c}`);
+      const val = matrix[c][r];
+      totalSamples += val;
+      if (r === c) {
+        correctSamples += val;
+      } else {
+        incorrectSamples += val;
+      }
+
       if (cell) {
-        // Transpose to map matrix[Actual][Predicted] to HTML cell cm-r-c (Row r = Predicted, Col c = Actual)
-        const val = matrix[c][r];
         cell.textContent = val;
 
         // Reset classes
@@ -118,6 +128,37 @@ export function renderConfusionMatrix(matrix) {
           cell.classList.add('matrix-incorrect');
         }
       }
+    }
+  }
+
+  const accuracy = totalSamples > 0 ? (correctSamples / totalSamples) * 100 : 0;
+
+  // Show perfect classification badge if off-diagonal is 0
+  const successBadge = document.getElementById('cm-success-badge');
+  const successDetails = document.getElementById('cm-success-details');
+  if (successBadge) {
+    if (incorrectSamples === 0 && totalSamples > 0) {
+      successBadge.style.display = 'block';
+      if (successDetails) {
+        successDetails.textContent = `${correctSamples} / ${totalSamples} Samples Correct`;
+      }
+    } else {
+      successBadge.style.display = 'none';
+    }
+  }
+
+  // Update summary footer
+  const summaryAccuracy = document.getElementById('cm-summary-accuracy');
+  const summaryMisclass = document.getElementById('cm-summary-misclass');
+  if (summaryAccuracy) {
+    summaryAccuracy.textContent = `${accuracy.toFixed(0)}%`;
+  }
+  if (summaryMisclass) {
+    summaryMisclass.textContent = incorrectSamples;
+    if (incorrectSamples > 0) {
+      summaryMisclass.className = 'matrix-summary-value text-error';
+    } else {
+      summaryMisclass.className = 'matrix-summary-value text-success';
     }
   }
 }
